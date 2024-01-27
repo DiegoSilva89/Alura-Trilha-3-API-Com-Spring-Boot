@@ -1,10 +1,7 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
-import med.voll.api.paciente.DadosAtualizacaoPaciente;
-import med.voll.api.paciente.DadosCadastroPaciente;
-import med.voll.api.paciente.DadosListagemPaciente;
-import med.voll.api.paciente.PacienteRepository;
+import med.voll.api.paciente.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,17 +13,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("pacientes")
 public class PacienteController {
 
-    @Autowired //injeção de dependencia
+    @Autowired
     private PacienteRepository repository;
 
     @PostMapping
-    public void cadastrar(@RequestBody DadosCadastroPaciente dados) {
-        System.out.println("dados recebido: " + dados);
+    @Transactional
+    public void cadastrar(@RequestBody @Valid DadosCadastroPaciente dados) {
+        repository.save(new Paciente(dados));
     }
 
     @GetMapping
-    @Transactional
-    public Page<DadosListagemPaciente> listar(@PageableDefault(page = 0, size = 10, sort = { "nome" }) Pageable paginacao) {
+    public Page<DadosListagemPaciente> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
         return repository.findAllByAtivoTrue(paginacao).map(DadosListagemPaciente::new);
     }
 
@@ -39,8 +36,10 @@ public class PacienteController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void remover(@PathVariable Long id) {
+    public void excluir(@PathVariable Long id) {
         var paciente = repository.getReferenceById(id);
-        paciente.inativar();
+        paciente.excluir();
     }
+
+
 }

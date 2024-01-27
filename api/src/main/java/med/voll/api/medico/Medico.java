@@ -15,12 +15,13 @@ import med.voll.api.endereco.Endereco;
 @EqualsAndHashCode(of = "id") //gera o Equals.hashcode apenas no id
 public class Medico {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String email;
+
     private String telefone;
+
     private String crm;
 
     @Enumerated(EnumType.STRING)
@@ -29,7 +30,7 @@ public class Medico {
     @Embedded
     private Endereco endereco;
 
-    private boolean ativo;
+    private Boolean ativo;
 
     public Medico(DadosCadastroMedico dados) {
         this.ativo = true;
@@ -51,6 +52,7 @@ public class Medico {
         if (dados.endereco() != null) {
             this.endereco.atualizarInformacoes(dados.endereco());
         }
+
     }
 
     public void excluir() {

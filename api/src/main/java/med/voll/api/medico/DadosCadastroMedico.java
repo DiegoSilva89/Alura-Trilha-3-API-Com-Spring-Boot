@@ -9,21 +9,21 @@ import med.voll.api.endereco.DadosEndereco;
 
 //Especialidade é um enum
 public record DadosCadastroMedico(
-        @NotBlank //Verifca se o nome está vazio ou nulo, apenas para Strings
+        @NotBlank
         String nome,
         @NotBlank
-        @Email //verifica se está no fomato E-mail
+        @Email
         String email,
+
         @NotBlank
         String telefone,
         @NotBlank
-        @Pattern(regexp = "\\d{4,6}") //expressão regular
+        @Pattern(regexp = "\\d{4,6}")
         String crm,
-        @NotNull //Impede que seja nulo, serve para int, double e etc
-        Especialidade especialidade,
         @NotNull
-        @Valid
-        DadosEndereco endereco) {
+        Especialidade especialidade,
+
+        @NotNull @Valid DadosEndereco endereco) {
 }
 
 /*Desse modo, conseguimos receber os dados na API. Mas ao invés de recebermos como string, usamos o record. Esse
